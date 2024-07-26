@@ -1,0 +1,41 @@
+from motor import stop
+import motor_pair
+import color_sensor
+from hub import port
+import runloop
+
+async def main():
+    
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 50, 50)
+
+    while True:
+        reflection_rateA = color_sensor.reflection(port.E)
+        reflection_rateB = color_sensor.reflection(port.F)
+
+        
+        if reflection_rateA <= 35:
+
+            motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 400, 0)
+
+        if reflection_rateB <= 35:
+            motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 0, 400)
+
+        if reflection_rateA <= 70 and reflection_rateA > 50:
+
+            motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 0, 400)
+
+        if reflection_rateB <= 70 and reflection_rateB > 50:
+            motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 400, 0)
+        
+        if reflection_rateA >= 55 and reflection_rateB >= 55:
+            
+            motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, 50, 100, 100)
+
+        
+    
+        
+
+        
+runloop.run(main())
