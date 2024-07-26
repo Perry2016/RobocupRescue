@@ -4,6 +4,7 @@ import color_sensor
 from hub import port
 import runloop
 
+
 async def main():
     
     motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
