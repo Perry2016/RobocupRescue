@@ -1,0 +1,15 @@
+from hub import light_matrix, port
+import runloop, motor_pair, color_sensor
+motors = motor_pair
+
+motors.pair(motor_pair.PAIR_1, port.A, port.B)
+colour = color_sensor
+
+def followline():
+    lcolour = colour.reflection(port.C)
+    rcolour = colour.reflection(port.D)
+    direction = (lcolour - rcolour) 
+    motors.move(motors.PAIR_1, direction, velocity = 360)
+
+while True:
+    followline()
