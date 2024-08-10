@@ -1,33 +1,24 @@
-import orientation
-from hub import port, light_matrix, button
-import runloop
-import motor_pair
+from hub import light_matrix, port # this adds ports
+import runloop, motor_pair, color_sensor, color
+motors = motor_pair #this shortens long code
+colour = color_sensor
 
-async def main():
-    driving_velocity = 250
+motors.pair(motor_pair.PAIR_1, port.A, port.B) # this pairs the two motor ports
 
-    # pair motors
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-    # define the ride function
-    async def ride():
-        await light_matrix.write(str(driving_velocity))
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 720, 0, velocity = driving_velocity)
-
-    # set conditions for moving forward and setting velocity
-    while True:
-        if button.pressed(button.LEFT):
-            driving_velocity -= 50
-            await ride()
-            await runloop.sleep_ms(3000)
-        elif button.pressed(button.RIGHT):
-            driving_velocity += 50
-            await ride()
-            await runloop.sleep_ms(3000)
-
-runloop.run(main())
-
-runloop.run(main())
-import orientation
-import motor
-from hub import port
+def followline(): # this is the function
+    lgreen = colour.color(port.C) #finding the color the sensors are seeing
+    rgreen = colour.color(port.D)
+    if lgreen is color.GREEN or rgreen is color.GREEN:# this move me left or right
+        if lgreen is color.GREEN: # if the left sensor discovers green then...
+            motors.move_for_degrees(motors.PAIR_1, 360, -45, velocity = 90) # the robot turns left
+        if rgreen is color.GREEN: # if the right sensor discovers green then...
+            motors.move_for_degrees(motors.PAIR_1, 360, 45, velocity = 90) # the robot turns right
+    else: # if there are no green squares
+        lcolour = colour.reflection(port.C) #this finds the reflected colour of the sensors
+        rcolour = colour.reflection(port.D)
+        direction = (lcolour - rcolour)*3 # this calculates the angle to go forward
+        motors.move(motors.PAIR_1, direction, velocity = 300) #this moves the robot along the line
+        color_sensor.reflection
+while color_sensor.reflection(port.C) > 90 and color_sensor.reflection(port.D) > 90:
+    followline() #this runs the function
