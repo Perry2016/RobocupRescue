@@ -28,4 +28,4 @@ def followline():
 
 while colour.reflection(port.C) < 80 or colour.reflection(port.D) < 80:
     followline() #this runs the function
-motor_pair.move_for_degrees(motor_pair.PAIR_1, 0, 0)
+motor_pair.stop(motor_pair.PAIR_1)
