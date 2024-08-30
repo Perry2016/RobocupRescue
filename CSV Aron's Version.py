@@ -18,9 +18,10 @@ async def main():
     await motors.move_for_degrees(motor_pair.PAIR_1,150,100, velocity= speed)
     #motors.move(motor_pair.PAIR_1, -100, velocity= 90)
     while True:
-        if distance_sensor.distance(port.E) > 400 or distance_sensor.distance(port.E) ==-1:
+        if distance_sensor.distance(port.E) > 600 or distance_sensor.distance(port.E) ==-1:
             motors.move(motor_pair.PAIR_1, -100, velocity= 50)
         else:
+
             motor_pair.stop(motor_pair.PAIR_1)
             time.sleep_ms(1000)
             distance_for_can = distance_sensor.distance(port.E)
@@ -40,15 +41,15 @@ async def main():
     motor_pair.stop(motor_pair.PAIR_1)
 
     if motion_sensor.tilt_angles()[0] < 0:
-        while motion_sensor.tilt_angles()[0] < -5:
+        while motion_sensor.tilt_angles()[0] < 0:
             motors.move(motor_pair.PAIR_1, 100, velocity= 50)
         motor_pair.stop(motor_pair.PAIR_1)
     else:
-        while motion_sensor.tilt_angles()[0] > 5:
+        while motion_sensor.tilt_angles()[0] > 0:
             motors.move(motor_pair.PAIR_1, -100, velocity= 50)
         motor_pair.stop(motor_pair.PAIR_1)
 
-    await motors.move_for_degrees(motor_pair.PAIR_1,630,0, velocity= 0 - speed)
+    await motors.move_for_degrees(motor_pair.PAIR_1,530,0, velocity= 0 - speed)
     await motor.run_for_degrees(port.F, 100, -100)
     await motors.move_for_degrees(motor_pair.PAIR_1,150,0, velocity= - 180)
     await motor.run_for_degrees(port.F, 200, -100)
